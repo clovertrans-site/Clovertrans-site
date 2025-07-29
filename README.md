@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="bg">
 <head>
@@ -91,6 +90,16 @@
     form button:hover {
       background-color: #1d5d80;
     }
+    #form-message {
+      margin-top: 15px;
+      font-weight: 600;
+    }
+    #form-message.success {
+      color: green;
+    }
+    #form-message.error {
+      color: red;
+    }
   </style>
 </head>
 <body>
@@ -127,7 +136,7 @@
       <p>Email: <a href="mailto:clovertransltd@gmail.com">clovertransltd@gmail.com</a></p>
       <p>Телефони: +359 87 853 0474, +359 878 477 677</p>
 
-      <form action="#" method="post">
+      <form id="contact-form" action="#" method="post" novalidate>
         <label for="name">Име:</label>
         <input type="text" id="name" name="name" required />
 
@@ -138,11 +147,47 @@
         <textarea id="message" name="message" rows="5" required></textarea>
 
         <button type="submit">Изпрати</button>
+
+        <div id="form-message"></div>
       </form>
     </section>
   </main>
   <footer>
     &copy; 2025 Клоувър Транс ЕООД. Всички права запазени.
   </footer>
+
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const name = this.name.value.trim();
+      const email = this.email.value.trim();
+      const message = this.message.value.trim();
+      const formMessage = document.getElementById('form-message');
+
+      // Основна валидация
+      if (!name || !email || !message) {
+        formMessage.textContent = 'Моля, попълнете всички полета.';
+        formMessage.className = 'error';
+        return;
+      }
+
+      // Проверка за валиден email (опростена)
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        formMessage.textContent = 'Моля, въведете валиден email.';
+        formMessage.className = 'error';
+        return;
+      }
+
+      // Тук можеш да добавиш изпращане към сървър с fetch/AJAX
+
+      // За демонстрация показваме съобщение за успех и изчистваме формата
+      formMessage.textContent = 'Благодарим Ви! Вашето съобщение беше изпратено.';
+      formMessage.className = 'success';
+
+      this.reset();
+    });
+  </script>
 </body>
 </html>
